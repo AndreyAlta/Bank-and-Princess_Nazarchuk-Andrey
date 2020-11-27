@@ -4,12 +4,12 @@ namespace Bank
 {
     class CreditCard
     {
-        private string Agreement { get; set; }
-        public bool transaction;
+        private string agreement;
+        public bool Transaction { get; set; }
         public string Surname { get; set; }
         public string Name { get; set; }
-        public int[] number = new int[20];
-        public int password;
+        public int[] Number { get; set; } = new int[20];
+        public int Password { get; set; }
         public Account account = new Account();
         public void ConnectCards(Account newAccount)
         {
@@ -22,7 +22,7 @@ namespace Bank
             double money = 0.0;
             InputMoney(ref money);
             GetAgreement();
-            if (Agreement == "N" || Agreement == "n")
+            if (agreement == "N" || agreement == "n")
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace Bank
             double money = 0.0;
             InputMoney(ref money);
             GetAgreement();
-            if (Agreement == "N" || Agreement == "n")
+            if (agreement == "N" || agreement == "n")
             {
                 return;
             }
@@ -45,12 +45,12 @@ namespace Bank
                 if (account.money >= money)
                 {
                     account.money -= money;
-                    transaction = true;
+                    Transaction = true;
                 }
                 else
                 {
                     Console.WriteLine("You cannot withdraw more money than you have!\nBut you can take out a credit.\nPress any key to continue.");
-                    transaction = false;
+                    Transaction = false;
                     Console.ReadKey();
                 }
             }
@@ -81,7 +81,7 @@ namespace Bank
             double money = 0.0;
             InputMoney(ref money);
             GetAgreement();
-            if (Agreement == "N" || Agreement == "n")
+            if (agreement == "N" || agreement == "n")
             {
                 return;
             }
@@ -94,7 +94,7 @@ namespace Bank
         public void WithdrawCredit()
         {
             GetAgreement();
-            if (Agreement == "N" || Agreement == "n")
+            if (agreement == "N" || agreement == "n")
             {
                 return;
             }
@@ -125,12 +125,12 @@ namespace Bank
             if (account.money >= money)
             {
                 account.money -= money;
-                transaction = true;
+                Transaction = true;
             }
             else
             {
                 Console.WriteLine("You cannot transfer more money than you have!\nBut you can take out a credit.\nPress any key to continue.");
-                transaction = false;
+                Transaction = false;
                 Console.ReadKey();
             }
         }
@@ -148,8 +148,8 @@ namespace Bank
             do
             {
                 Console.Write("Are you sure of your action? (please write yes-Y(y) or no-N(n)): ");
-                Agreement = Console.ReadLine();
-            } while (Agreement != "N" && Agreement != "Y" && Agreement != "n" && Agreement != "y");
+                agreement = Console.ReadLine();
+            } while (agreement != "N" && agreement != "Y" && agreement != "n" && agreement != "y");
         }
     }
 }

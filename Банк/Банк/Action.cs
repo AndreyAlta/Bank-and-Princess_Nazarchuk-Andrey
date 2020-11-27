@@ -5,6 +5,7 @@ namespace Bank
 {
     class Action
     {
+        private int value;
         private int indexFirstCard;
         private int indexSecondCard;
         private int counterNumbers;
@@ -50,7 +51,7 @@ namespace Bank
                     {
                         for (int j = 0; j < 20; j++)
                         {
-                            if (debitCard[i].number[j] == number[j])
+                            if (debitCard[i].Number[j] == number[j])
                             {
                                 counterTruth++;
                             }
@@ -64,7 +65,7 @@ namespace Bank
                     }
                     for (int i = 0; i < 20; i++)
                     {
-                        debitCard[counterDebit].number[i] = number[i];
+                        debitCard[counterDebit].Number[i] = number[i];
                     }
                     counterDebit++;
                     CheckOriginality();
@@ -74,11 +75,12 @@ namespace Bank
                 do
                 {
                     Write("Write your password(4 digits): ");
-                } while (!int.TryParse(ReadLine(), out debitCard[counterDebit].password) || debitCard[counterDebit].password > 9999 || debitCard[counterDebit].password < 999);
+                } while (!int.TryParse(ReadLine(), out value) || value > 9999 || value < 999);
+                debitCard[counterDebit].Password = value;
                 Verification();
                 if (exit == true)
                 {
-                    debitCard[counterDebit].number = null;
+                    debitCard[counterDebit].Number = null;
                     return;
                 }
                 Clear();
@@ -106,7 +108,7 @@ namespace Bank
                     {
                         for (int j = 0; j < 20; j++)
                         {
-                            if (creditCard[i].number[j] == number[j])
+                            if (creditCard[i].Number[j] == number[j])
                             {
                                 counterTruth++;
                             }
@@ -120,7 +122,7 @@ namespace Bank
                     }
                     for (int i = 0; i < counterNumbers; i++)
                     {
-                        creditCard[counterCredit].number[i] = number[i];
+                        creditCard[counterCredit].Number[i] = number[i];
                     }
                     counterCredit++;
                     CheckOriginality();
@@ -130,11 +132,12 @@ namespace Bank
                 do
                 {
                     Write("Write your password(4 digits): ");
-                } while (!int.TryParse(ReadLine(), out creditCard[counterCredit].password) || creditCard[counterCredit].password > 9999 || creditCard[counterCredit].password < 999);
+                } while (!int.TryParse(ReadLine(), out value) || value > 9999 || value < 999);
+                creditCard[counterCredit].Password = value;
                 Verification();
                 if (exit == true)
                 {
-                    creditCard[counterCredit].number = null;
+                    creditCard[counterCredit].Number = null;
                     exit = false;
                     return;
                 }
@@ -179,7 +182,7 @@ namespace Bank
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    if (debitCard[i].number[j] == number[j])
+                    if (debitCard[i].Number[j] == number[j])
                     {
                         counterTruth++;
                     }
@@ -196,7 +199,7 @@ namespace Bank
                         errorTransaction = true;
                         counterTruth = 0;
                         return;
-                    case true when connectDebit == true && counterTruth == 20 && debitCard[i].password == password:
+                    case true when connectDebit == true && counterTruth == 20 && debitCard[i].Password == password:
                         indexSecondCard = i;
                         counterTruth = 0;
                         return;
@@ -217,7 +220,7 @@ namespace Bank
             {
                 unknown = false;
                 entrance = true;
-                if (debitCard[indexFirstCard].password == password)
+                if (debitCard[indexFirstCard].Password == password)
                 {
                     do
                     {
@@ -226,7 +229,7 @@ namespace Bank
                         Write($"Name: {debitCard[indexFirstCard].Name}\nSurname: {debitCard[indexFirstCard].Surname}\nNumber: ");
                         for (int j = 0; j < 20; j++)
                         {
-                            Write(debitCard[indexFirstCard].number[j]);
+                            Write(debitCard[indexFirstCard].Number[j]);
                         }
                         debitCard[indexFirstCard].CheckMoney();
                         do
@@ -264,13 +267,13 @@ namespace Bank
                                     if (unknown == false)
                                     {
                                         debitCard[indexFirstCard].WithdrawTransactionMoney(money);
-                                        if (creditTransaction == false && debitCard[indexFirstCard].transaction == true)
+                                        if (creditTransaction == false && debitCard[indexFirstCard].Transaction == true)
                                         {
                                             debitCard[indexSecondCard].TransactionMoney(money);
                                             WriteLine("Operation was successfully completed.Press any key to continue.");
                                             ReadKey();
                                         }
-                                        else if (creditTransaction == true && debitCard[indexFirstCard].transaction == true)
+                                        else if (creditTransaction == true && debitCard[indexFirstCard].Transaction == true)
                                         {
                                             creditCard[indexSecondCard].AddTransactionMoney(money);
                                             WriteLine("Operation was successfully completed.Press any key to continue.");
@@ -290,6 +293,7 @@ namespace Bank
                                         break;
                                     }
                                 }
+                                creditTransaction = false;
                                 break;
                             case "4":
                                 connectDebit = true;
@@ -324,7 +328,7 @@ namespace Bank
                 counterTruth = 0;
                 for (int j = 0; j < 20; j++)
                 {
-                    if (creditCard[i].number[j] == number[j])
+                    if (creditCard[i].Number[j] == number[j])
                     {
                         counterTruth++;
                     }
@@ -340,7 +344,7 @@ namespace Bank
                         indexSecondCard = i;
                         counterTruth = 0;
                         return;
-                    case true when connectCredit == true && counterTruth == 20 && creditCard[i].password == password:
+                    case true when connectCredit == true && counterTruth == 20 && creditCard[i].Password == password:
                         indexSecondCard = i;
                         counterTruth = 0;
                         return;
@@ -370,7 +374,7 @@ namespace Bank
             {
                 unknown = false;
                 entrance = true;
-                if (creditCard[indexFirstCard].password == password)
+                if (creditCard[indexFirstCard].Password == password)
                 {
                     do
                     {
@@ -379,7 +383,7 @@ namespace Bank
                         Write($"Name: {creditCard[indexFirstCard].Name}\nSurname: {creditCard[indexFirstCard].Surname}\nNumber: ");
                         for (int j = 0; j < 20; j++)
                         {
-                            Write(creditCard[indexFirstCard].number[j]);
+                            Write(creditCard[indexFirstCard].Number[j]);
                         }
                         creditCard[indexFirstCard].CheckMoney();
                         creditCard[indexFirstCard].ShowCredit();
@@ -425,7 +429,7 @@ namespace Bank
                                             if (unknown == false)
                                             {
                                                 creditCard[indexFirstCard].WithdrawTransactionMoney(money);
-                                                if (creditCard[indexFirstCard].transaction == true)
+                                                if (creditCard[indexFirstCard].Transaction == true)
                                                 {
                                                     creditCard[indexSecondCard].AddTransactionMoney(money);
                                                     WriteLine("Operation was successfully completed.Press any key to continue.");
@@ -541,11 +545,11 @@ namespace Bank
                     {
                         for (int j = 0; j < 20; j++)
                         {
-                            if (debitCard[k].number == null || creditCard[i].number == null)
+                            if (debitCard[k].Number == null || creditCard[i].Number == null)
                             {
                                 break;
                             }
-                            if (debitCard[k].number[j] == creditCard[i].number[j])
+                            if (debitCard[k].Number[j] == creditCard[i].Number[j])
                             {
                                 counterTruth++;
                             }
@@ -555,11 +559,11 @@ namespace Bank
                     {
                         for (int j = 0; j < 20; j++)
                         {
-                            if (debitCard[i].number == null || creditCard[k].number == null)
+                            if (debitCard[i].Number == null || creditCard[k].Number == null)
                             {
                                 break;
                             }
-                            if (debitCard[i].number[j] == creditCard[k].number[j])
+                            if (debitCard[i].Number[j] == creditCard[k].Number[j])
                             {
                                 counterTruth++;
                             }
