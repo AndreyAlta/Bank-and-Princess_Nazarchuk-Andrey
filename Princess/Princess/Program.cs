@@ -4,7 +4,7 @@ namespace Princess
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             bool end = false;
             bool input = true;
