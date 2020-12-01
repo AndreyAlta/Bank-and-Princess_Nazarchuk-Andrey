@@ -5,7 +5,7 @@ namespace Princess
     public class Hero
     {
         public int HillPoints { get; set; }
-        
+
         public Hero()
         {
             HillPoints = 10;

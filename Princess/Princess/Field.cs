@@ -5,24 +5,29 @@ namespace Princess
     public class Field
     {
         private string[,] cell;
-
+        private const int numberOfColumns = 10;
+        private const int numberOfRows = 10;
+        private const string cellIcon = "ⓞ";
+        private const string heroIcon = "H";
+        private const string princessIcon = "P";
+        private const string heroAndPrincessIcon = heroIcon + princessIcon;
         public Field()
         {
             cell = new string[10, 10];
 
-            for (int row = 0; row < 10; row++)
+            for (int row = 0; row < numberOfRows; row++)
             {
-                for (int column = 0; column < 10; column++)
+                for (int column = 0; column < numberOfColumns; column++)
                 {
-                    cell[row, column] = "ⓞ";
+                    cell[row, column] = cellIcon;
                 }
             }
 
-            cell[0, 0] = "H";
-            cell[9, 9] = "P";
+            cell[0, 0] = heroIcon;
+            cell[numberOfRows - 1, numberOfRows - 1] = princessIcon;
         }
 
-        public void GetField()
+        public void SetField()
         {
             Console.WriteLine("Control the arrows.");
 
@@ -35,7 +40,7 @@ namespace Princess
             }
         }
 
-        public void GetMovement()
+        public void BeginMovement()
         {
             Mine mine = new Mine();
             Hero hero = new Hero();
@@ -48,10 +53,10 @@ namespace Princess
             do
             {
                 Console.Clear();
-                GetField();
+                SetField();
                 hero.CheckHillPoints();
 
-                cell[row, column] = "ⓞ";
+                cell[row, column] = cellIcon;
 
                 switch (Console.ReadKey().Key)
                 {
@@ -62,13 +67,13 @@ namespace Princess
                         }
                         break;
                     case ConsoleKey.RightArrow:
-                        if (column < 9)
+                        if (column < numberOfColumns - 1)
                         {
                             column += 1;
                         }
                         break;
                     case ConsoleKey.DownArrow:
-                        if (row < 9)
+                        if (row < numberOfRows - 1)
                         {
                             row += 1;
                         }
@@ -83,11 +88,11 @@ namespace Princess
 
                 switch (cell[row, column])
                 {
-                    case "ⓞ":
-                        cell[row, column] = "H";
+                    case cellIcon:
+                        cell[row, column] = heroIcon;
                         break;
-                    case "P":
-                        cell[row, column] = "PH";
+                    case princessIcon:
+                        cell[row, column] = heroAndPrincessIcon;
                         break;
                 }
 
@@ -103,22 +108,22 @@ namespace Princess
                 if (mine.Damage[row, column] > 0)
                 {
                     Console.Clear();
-                    GetField();
+                    SetField();
                     hero.CheckHillPoints();
 
                     Console.WriteLine($"Mine damage-{mine.Damage[row, column]}\nPress any key.");
                     mine.Damage[row, column] = 0;
                     Console.ReadKey();
                 }
-
-            } while (cell[9, 9] == "P" && hero.HillPoints > 0);
+            }
+            while (cell[numberOfRows - 1, numberOfRows - 1] == "P" && hero.HillPoints > 0);
 
             Console.Clear();
 
             if (hero.HillPoints > 0)
             {
-                cell[9, 9] = "PH";
-                GetField();
+                cell[numberOfRows - 1, numberOfRows - 1] = heroAndPrincessIcon;
+                SetField();
                 hero.CheckHillPoints();
 
                 Console.WriteLine("You have completed the game!\nPress any key.");

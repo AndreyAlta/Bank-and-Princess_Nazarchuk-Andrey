@@ -2,10 +2,14 @@
 {
     public class Game
     {
-        Field field = new Field();
+        Field field;
+        public Game()
+        {
+            field = new Field();
+        }
         public void StartGame()
         {
-            field.GetMovement();
+            field.BeginMovement();
         }
     }
 }

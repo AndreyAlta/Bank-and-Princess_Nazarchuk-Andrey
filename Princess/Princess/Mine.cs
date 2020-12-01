@@ -4,11 +4,12 @@ namespace Princess
 {
     public class Mine
     {
-        Random random = new Random();
+        Random random;
         public int[,] Damage { get; set; }
 
         public Mine()
         {
+            random = new Random();
             Damage = new int[10, 10];
         }
 

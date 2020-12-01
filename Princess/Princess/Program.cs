@@ -4,10 +4,11 @@ namespace Princess
 {
     public class Program
     {
+        private const string gameContinuationMessage = "Start a new game?\nPress Enter(Yes) or Esc(No)";
         private static void Main(string[] args)
         {
-            bool end = false;
-            bool trueKey;
+            bool isGameEnd = false;
+            bool isEnterOrEscape = false;
             do
             {
                 Game game = new Game();
@@ -16,26 +17,28 @@ namespace Princess
                 do
                 {
                     Console.Clear();
-                    Console.Write("Start a new game?\nPress Enter(Yes) or Esc(No)");
+                    Console.Write(gameContinuationMessage);
 
                     switch (Console.ReadKey().Key)
                     {
                         case ConsoleKey.Enter:
-                            trueKey = true;
-                            end = false;
+                            isEnterOrEscape = true;
+                            isGameEnd = false;
                             break;
+
                         case ConsoleKey.Escape:
-                            trueKey = true;
-                            end = true;
+                            isEnterOrEscape = true;
+                            isGameEnd = true;
                             break;
+
                         default:
-                         trueKey= false;
+                            isEnterOrEscape = false;
                             break;
                     }
-
-                } while (trueKey == false);
-
-            } while (end == false);
+                }
+                while (!isEnterOrEscape);
+            }
+            while (!isGameEnd);
         }
     }
 }
