@@ -4,10 +4,12 @@ namespace Princess
 {
     public class Field
     {
-        private string[,] cell = new string[10, 10];
+        private string[,] cell;
 
         public Field()
         {
+            cell = new string[10, 10];
+
             for (int row = 0; row < 10; row++)
             {
                 for (int column = 0; column < 10; column++)
@@ -15,6 +17,7 @@ namespace Princess
                     cell[row, column] = "ⓞ";
                 }
             }
+
             cell[0, 0] = "H";
             cell[9, 9] = "P";
         }
@@ -37,7 +40,7 @@ namespace Princess
             Mine mine = new Mine();
             Hero hero = new Hero();
 
-            mine.GetMine();
+            mine.SetMine();
 
             int row = 0;
             int column = 0;
@@ -92,21 +95,19 @@ namespace Princess
                 {
                     hero.HillPoints = 0;
                 }
-
-                if (hero.HillPoints >= mine.Damage[row, column])
+                else
                 {
                     hero.HillPoints -= mine.Damage[row, column];
                 }
 
                 if (mine.Damage[row, column] > 0)
                 {
-                    mine.Damage[row, column] = 0;
-
                     Console.Clear();
                     GetField();
                     hero.CheckHillPoints();
 
                     Console.WriteLine($"Mine damage-{mine.Damage[row, column]}\nPress any key.");
+                    mine.Damage[row, column] = 0;
                     Console.ReadKey();
                 }
 
@@ -119,6 +120,7 @@ namespace Princess
                 cell[9, 9] = "PH";
                 GetField();
                 hero.CheckHillPoints();
+
                 Console.WriteLine("You have completed the game!\nPress any key.");
                 Console.ReadKey();
             }

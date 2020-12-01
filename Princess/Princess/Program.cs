@@ -2,12 +2,12 @@
 
 namespace Princess
 {
-    class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
             bool end = false;
-            bool input = true;
+            bool trueKey;
             do
             {
                 Game game = new Game();
@@ -21,18 +21,19 @@ namespace Princess
                     switch (Console.ReadKey().Key)
                     {
                         case ConsoleKey.Enter:
-                            input = true;
+                            trueKey = true;
                             end = false;
                             break;
                         case ConsoleKey.Escape:
-                            input = true;
+                            trueKey = true;
                             end = true;
                             break;
                         default:
-                            input = false;
+                         trueKey= false;
                             break;
                     }
-                } while (input == false);
+
+                } while (trueKey == false);
 
             } while (end == false);
         }

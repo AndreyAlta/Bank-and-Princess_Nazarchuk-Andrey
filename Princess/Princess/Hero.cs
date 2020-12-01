@@ -4,7 +4,12 @@ namespace Princess
 {
     public class Hero
     {
-        public int HillPoints { get; set; } = 10;
+        public int HillPoints { get; set; }
+        
+        public Hero()
+        {
+            HillPoints = 10;
+        }
 
         public void CheckHillPoints()
         {

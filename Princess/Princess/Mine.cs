@@ -5,10 +5,14 @@ namespace Princess
     public class Mine
     {
         Random random = new Random();
+        public int[,] Damage { get; set; }
 
-        public int[,] Damage { get; set; } = new int[10, 10];
+        public Mine()
+        {
+            Damage = new int[10, 10];
+        }
 
-        public void GetMine()
+        public void SetMine()
         {
             for (int amount = 0; amount < 10; amount++)
             {
