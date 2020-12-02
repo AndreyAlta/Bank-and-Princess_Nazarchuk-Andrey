@@ -5,8 +5,10 @@ namespace Princess
     public class Field
     {
         private string[,] cell;
+
         private const int numberOfColumns = 10;
         private const int numberOfRows = 10;
+
         private const string cellIcon = "ⓞ";
         private const string heroIcon = "H";
         private const string princessIcon = "P";
