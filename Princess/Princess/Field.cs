@@ -12,6 +12,7 @@ namespace Princess
         private const string cellIcon = "ⓞ";
         private const string heroIcon = "H";
         private const string princessIcon = "P";
+
         private const string heroAndPrincessIcon = heroIcon + princessIcon;
 
         public Field()
