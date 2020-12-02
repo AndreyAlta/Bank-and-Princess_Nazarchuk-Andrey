@@ -11,9 +11,10 @@ namespace Princess
         private const string heroIcon = "H";
         private const string princessIcon = "P";
         private const string heroAndPrincessIcon = heroIcon + princessIcon;
+
         public Field()
         {
-            cell = new string[10, 10];
+            cell = new string[numberOfRows, numberOfColumns];
 
             for (int row = 0; row < numberOfRows; row++)
             {
@@ -24,16 +25,16 @@ namespace Princess
             }
 
             cell[0, 0] = heroIcon;
-            cell[numberOfRows - 1, numberOfRows - 1] = princessIcon;
+            cell[numberOfRows - 1, numberOfColumns - 1] = princessIcon;
         }
 
         public void SetField()
         {
             Console.WriteLine("Control the arrows.");
 
-            for (int row = 0; row < 10; row++, Console.WriteLine())
+            for (int row = 0; row < numberOfRows; row++, Console.WriteLine())
             {
-                for (int column = 0; column < 10; column++)
+                for (int column = 0; column < numberOfColumns; column++)
                 {
                     Console.Write($"{cell[row, column]} ");
                 }
