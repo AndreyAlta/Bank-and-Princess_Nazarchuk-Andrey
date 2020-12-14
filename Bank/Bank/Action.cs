@@ -254,8 +254,7 @@ namespace Bank
         {
             Console.Clear();
 
-            bool credit;
-            bool entrance = false;
+            bool loggedIn = false;
 
             InputNumberCard();
 
@@ -314,7 +313,7 @@ namespace Bank
             if (counterСoincidence == StandartNumberOfDigits)
             {
                 isUnknownUser = false;
-                entrance = true;
+                loggedIn = true;
 
                 if (debitCard[indexFirstCard].Password == password)
                 {
@@ -520,7 +519,7 @@ namespace Bank
             {
                 isUnknownUser = false;
 
-                entrance = true;
+                loggedIn = true;
 
                 if (creditCard[indexFirstCard].Password == password)
                 {
@@ -554,9 +553,7 @@ namespace Bank
                                 break;
                             case ConsoleKey.NumPad3:
 
-                                credit = creditCard[indexFirstCard].CheckCredit();
-
-                                if (credit == false)
+                                if (creditCard[indexFirstCard].CheckCredit())
                                 {
                                     isTrueUser = false;
 
@@ -687,7 +684,7 @@ namespace Bank
                 }
             }
 
-            if (entrance == false)
+            if (loggedIn == false)
             {
                 communication.GetMessageAboutUnknownAccount();
                 return;
