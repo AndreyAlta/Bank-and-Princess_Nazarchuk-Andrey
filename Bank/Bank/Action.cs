@@ -5,6 +5,10 @@ namespace Bank
 {
     class Action
     {
+        public const ConsoleKey UnknownKey = 0;
+
+        private ConsoleKey key;
+
         private const int StandartNumberOfDigits = 20;
 
         private int indexFirstCard;
@@ -26,8 +30,6 @@ namespace Bank
 
         private bool isCancelSelection;
 
-        private bool isCancelRegistration;
-
         private bool isErrorTransaction;
 
         private bool isRegistrationSuccessfuly;
@@ -40,11 +42,7 @@ namespace Bank
 
         private bool isConnectCredit;
 
-        private bool isVerificationAccepted;
-
         private bool isTrueUser;
-
-        private string isAgreementAccepted;
 
         private double money;
 
@@ -57,10 +55,15 @@ namespace Bank
         {
             creditCard = new CreditCard[0];
             debitCard = new DebitCard[0];
+
             communication = new Communication();
+
             isTrueUser = true;
+
             isConnectCredit = false;
+
             isConnectDebit = false;
+
             isCancelSelection = false;
         }
 
@@ -73,8 +76,6 @@ namespace Bank
 
             do
             {
-                isCancelRegistration = false;
-
                 communication.GetMessageAboutRegistration();
 
                 Write("Write your surname: ");
@@ -129,16 +130,15 @@ namespace Bank
                 debitCard[counterDebit].Password = password;
                 Verification();
 
-                if (isCancelRegistration == true)
+                if (key == ConsoleKey.Escape)
                 {
-                    counterDebit--;
                     debitCard[counterDebit].Number = null;
                     return;
                 }
 
                 Clear();
             }
-            while (isVerificationAccepted == false);
+            while (key == ConsoleKey.Spacebar);
 
             counterDebit++;
         }
@@ -210,38 +210,44 @@ namespace Bank
 
                 Verification();
 
-                if (isCancelRegistration == true)
+                if (key == ConsoleKey.Escape)
                 {
-                    counterCredit--;
                     creditCard[counterCredit].Number = null;
-                    isCancelRegistration = false;
                     return;
                 }
 
                 Clear();
-
             }
-            while (isVerificationAccepted == false);
+            while (key == ConsoleKey.Spacebar);
 
             counterCredit++;
         }
 
         public void Verification()
         {
-            communication.GetVerificationInstruction();
-
-            switch (Console.ReadKey().Key)
+            do
             {
-                case ConsoleKey.Enter:
-                    isVerificationAccepted = true;
-                    break;
-                case ConsoleKey.Spacebar:
-                    isVerificationAccepted = false;
-                    break;
-                case ConsoleKey.Escape:
-                    isCancelRegistration = true;
-                    break;
+                Console.Clear();
+
+                communication.GetVerificationInstruction();
+
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.Enter:
+                        key = ConsoleKey.Enter;
+                        break;
+                    case ConsoleKey.Spacebar:
+                        key = ConsoleKey.Spacebar;
+                        break;
+                    case ConsoleKey.Escape:
+                        key = ConsoleKey.Escape;
+                        break;
+                    default:
+                        key = UnknownKey;
+                        break;
+                }
             }
+            while (key == UnknownKey);
         }
 
         public void GetInfo()
@@ -293,7 +299,10 @@ namespace Bank
 
                         counterСoincidence = 0;
                         return;
+                    case true when isConnectDebit == true && counterСoincidence != StandartNumberOfDigits || debitCard[numberOfCard].Password != password:
 
+                        isConnectDebit = false;
+                        return;
                 }
 
                 if (isTrueUser == true && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == false)
@@ -302,13 +311,6 @@ namespace Bank
                     break;
                 }
             }
-
-            if (isConnectDebit == true)
-            {
-                isCancelRegistration = true;
-                return;
-            }
-
             if (counterСoincidence == StandartNumberOfDigits)
             {
                 isUnknownUser = false;
@@ -359,64 +361,72 @@ namespace Bank
                                 while (!double.TryParse(Console.ReadLine(), out money) || money < 0);
 
                                 Write("Are you sure of your action? (please choose Enter or Esc: ");
-
-                                switch (Console.ReadKey().Key)
+                                do
                                 {
-                                    case ConsoleKey.Enter:
-                                        if (isUnknownUser == false)
-                                        {
+                                    switch (Console.ReadKey().Key)
+                                    {
+                                        case ConsoleKey.Enter:
+                                            key = ConsoleKey.Enter;
 
-                                            debitCard[indexFirstCard].WithdrawTransactionMoney(money);
-
-                                            if (isCreditTransaction == false && debitCard[indexFirstCard].Transaction == true)
+                                            if (isUnknownUser == false)
                                             {
-                                                debitCard[indexSecondCard].TransactionMoney(money);
 
-                                                communication.GetMessageAboutSuccessfullyOperation();
+                                                debitCard[indexFirstCard].WithdrawTransactionMoney(money);
+
+                                                if (isCreditTransaction == false && debitCard[indexFirstCard].Transaction == true)
+                                                {
+                                                    debitCard[indexSecondCard].TransactionMoney(money);
+
+                                                    communication.GetMessageAboutSuccessfullyOperation();
+                                                }
+
+                                                else if (isCreditTransaction == true && debitCard[indexFirstCard].Transaction == true)
+                                                {
+                                                    creditCard[indexSecondCard].AddTransactionMoney(money);
+
+                                                    communication.GetMessageAboutSuccessfullyOperation();
+
+                                                    isCreditTransaction = false;
+                                                }
                                             }
 
-                                            else if (isCreditTransaction == true && debitCard[indexFirstCard].Transaction == true)
+                                            else if (isUnknownUser == true)
                                             {
-                                                creditCard[indexSecondCard].AddTransactionMoney(money);
+                                                debitCard[indexFirstCard].WithdrawTransactionMoney(money);
 
                                                 communication.GetMessageAboutSuccessfullyOperation();
 
-                                                isCreditTransaction = false;
+                                                Clear();
                                             }
-                                        }
-
-                                        else if (isUnknownUser == true)
-                                        {
-                                            debitCard[indexFirstCard].WithdrawTransactionMoney(money);
-
-                                            communication.GetMessageAboutSuccessfullyOperation();
-
-                                            Clear();
-                                        }
-                                        break;
-                                    default:
-                                        break;
+                                            break;
+                                        case ConsoleKey.Escape:
+                                            key = ConsoleKey.Escape;
+                                            break;
+                                        default:
+                                            key = UnknownKey;
+                                            break;
+                                    }
                                 }
+                                while (key == UnknownKey);
                                 isCreditTransaction = false;
                                 break;
                             case ConsoleKey.NumPad4:
-
                                 isConnectDebit = true;
 
                                 GetInfo();
 
-                                if (isCancelRegistration == false)
+                                if (isConnectDebit == true)
                                 {
-                                    debitCard[indexFirstCard].ConnectCards(debitCard[indexSecondCard].account);
+                                    isConnectDebit = false;
+
+                                    debitCard[indexFirstCard].ConnectCards(debitCard[indexSecondCard].Account);
 
                                     communication.GetMessageAboutSuccessfullyOperation();
                                 }
-
                                 else
                                 {
                                     communication.GetMessageAboutWrongPassword();
 
-                                    isCancelRegistration = false;
                                 }
 
                                 isConnectDebit = false;
@@ -432,7 +442,6 @@ namespace Bank
 
                     isCancelSelection = false;
                 }
-
                 else
                 {
                     communication.GetMessageAboutWrongPassword();
@@ -475,6 +484,10 @@ namespace Bank
 
                         counterСoincidence = 0;
                         return;
+                    case true when isConnectCredit == true && counterСoincidence != StandartNumberOfDigits || creditCard[i].Password != password:
+
+                        isConnectCredit = false;
+                        return;
 
                 }
 
@@ -488,7 +501,6 @@ namespace Bank
 
             if (isConnectCredit == true)
             {
-                isCancelRegistration = true;
                 return;
             }
 
@@ -517,10 +529,12 @@ namespace Bank
                         Clear();
 
                         communication.GetInformationAboutUser(debitCard[indexFirstCard].Name, debitCard[indexFirstCard].Surname, StandartNumberOfDigits, debitCard[indexFirstCard].Number);
-                        communication.GetCreditCardMenuInstruction();
+
                         creditCard[indexFirstCard].CheckMoney();
 
                         creditCard[indexFirstCard].ShowCredit();
+
+                        communication.GetCreditCardMenuInstruction();
 
                         communication.GetCreditCardMenuInstruction();
 
@@ -566,39 +580,44 @@ namespace Bank
                                         }
                                         while (!double.TryParse(ReadLine(), out money) || money < 0);
 
+                                        Write("Are you sure of your action? (please write yes-Y(y) or no-N(n)): ");
+
                                         do
                                         {
-                                            Write("Are you sure of your action? (please write yes-Y(y) or no-N(n)): ");
-                                            isAgreementAccepted = ReadLine();
-                                        } while (isAgreementAccepted != "N" && isAgreementAccepted != "Y" && isAgreementAccepted != "n" && isAgreementAccepted != "y");
+                                            switch (Console.ReadKey().Key)
+                                            {
+                                                case ConsoleKey.Enter:
 
-                                        switch (Console.ReadKey().Key)
-                                        {
-                                            case ConsoleKey.Enter:
-
-                                                if (isUnknownUser == false)
-                                                {
-                                                    creditCard[indexFirstCard].WithdrawTransactionMoney(money);
-
-                                                    if (creditCard[indexFirstCard].Transaction == true)
+                                                    if (isUnknownUser == false)
                                                     {
-                                                        creditCard[indexSecondCard].AddTransactionMoney(money);
+                                                        creditCard[indexFirstCard].WithdrawTransactionMoney(money);
+
+                                                        if (creditCard[indexFirstCard].Transaction == true)
+                                                        {
+                                                            creditCard[indexSecondCard].AddTransactionMoney(money);
+
+                                                            communication.GetMessageAboutSuccessfullyOperation();
+                                                        }
+                                                    }
+                                                    else if (isUnknownUser == true)
+                                                    {
+                                                        creditCard[indexFirstCard].WithdrawTransactionMoney(money);
 
                                                         communication.GetMessageAboutSuccessfullyOperation();
+
+                                                        Clear();
                                                     }
-                                                }
-                                                else if (isUnknownUser == true)
-                                                {
-                                                    creditCard[indexFirstCard].WithdrawTransactionMoney(money);
-
-                                                    communication.GetMessageAboutSuccessfullyOperation();
-
-                                                    Clear();
-                                                }
-                                                break;
-                                            case ConsoleKey.Escape:
-                                                break;
+                                                    break;
+                                                case ConsoleKey.Escape:
+                                                    key = ConsoleKey.Escape;
+                                                    break;
+                                                default:
+                                                    key = UnknownKey;
+                                                    break;
+                                            }
                                         }
+                                        while (key == UnknownKey);
+
                                         isErrorTransaction = false;
                                     }
                                     else
@@ -631,15 +650,13 @@ namespace Bank
 
                                 isCreditTransaction = false;
 
-                                isConnectCredit = false;
-
                                 isTrueUser = true;
 
-                                if (isCancelRegistration == false)
+                                if (isConnectCredit == true)
                                 {
                                     isConnectCredit = false;
 
-                                    creditCard[indexFirstCard].ConnectCards(creditCard[indexSecondCard].account);
+                                    creditCard[indexFirstCard].ConnectCards(creditCard[indexSecondCard].Account);
 
                                     communication.GetMessageAboutSuccessfullyOperation();
                                 }
@@ -648,7 +665,6 @@ namespace Bank
                                 {
                                     communication.GetMessageAboutWrongPassword();
 
-                                    isCancelRegistration = false;
                                 }
 
                                 isConnectCredit = false;

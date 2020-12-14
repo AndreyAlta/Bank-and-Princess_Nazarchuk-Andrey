@@ -4,7 +4,7 @@ namespace Bank
 {
     class Card
     {
-        private string agreement;
+        private ConsoleKey key;
 
         public bool Transaction { get; set; }
 
@@ -16,78 +16,91 @@ namespace Bank
 
         public string Password { get; set; }
 
+        public Account Account { get; set; }
 
-        public Account account;
+        private Communication communication;
 
         public Card()
         {
             Number = new int[20];
 
-            account = new Account();
-        }
-        public virtual void ConnectCards(Account newAccount)
-        {
-            newAccount.Money += account.Money;
-            newAccount.Credit += account.Credit;
+            Account = new Account();
 
-            account = newAccount;
+            communication = new Communication();
         }
-        public virtual void AddMoney()
+        public void ConnectCards(Account newAccount)
         {
-            double money = 0.0;
+            newAccount.Money += Account.Money;
 
-            InputMoney(ref money);
+            newAccount.Credit += Account.Credit;
+
+            Account = newAccount;
+        }
+        public void AddMoney()
+        {
+            double money = InputMoney();
 
             GetAgreement();
-            if (agreement == "N" || agreement == "n")
+            if (key == ConsoleKey.Escape)
             {
                 return;
             }
-            else
+
+            if (key == ConsoleKey.Enter)
             {
-                account.Money += money;
+                Account.Money += money;
             }
         }
-        public virtual void WithdrawMoney()
+        public void WithdrawMoney()
         {
-            double money = 0.0;
-            InputMoney(ref money);
+            double money = InputMoney();
+
             GetAgreement();
-            if (agreement == "N" || agreement == "n")
+
+            if (key == ConsoleKey.Escape)
             {
                 return;
             }
-            else
+
+            if (key == ConsoleKey.Enter)
             {
-                if (account.Money >= money)
+                if (Account.Money >= money)
                 {
-                    account.Money -= money;
+                    Account.Money -= money;
+
                     Transaction = true;
                 }
                 else
                 {
-                    Console.WriteLine("You cannot withdraw more money than you have!\nBut you can take out a credit.\nPress any key to continue.");
+                    communication.GetMessageAboutMoneyShortageError();
+
                     Transaction = false;
+
                     Console.ReadKey();
                 }
             }
         }
-        public virtual void CheckMoney()
+
+        public void CheckMoney()
         {
-            Console.WriteLine("\nMoney on the account: " + account.Money);
+            Console.WriteLine("\nMoney on the account: " + Account.Money);
         }
+
         public void TransactionMoney(double money)
         {
-            account.Money += money;
+            Account.Money += money;
         }
-        public virtual void ShowCredit()
+
+        public void ShowCredit()
         {
-            Console.WriteLine("Your credit: " + account.Credit);
+            Console.WriteLine("Your credit: " + Account.Credit);
         }
-        public virtual bool CheckCredit()
+
+        public bool CheckCredit()
         {
             bool checkCredit;
-            if (account.Credit > 0.0)
+
+            if (Account.Credit > 0.0)
             {
                 checkCredit = true;
             }
@@ -95,69 +108,85 @@ namespace Bank
             {
                 checkCredit = false;
             }
+
             return checkCredit;
         }
-        public virtual void AddCredit()
+
+        public void AddCredit()
         {
-            double money = 0.0;
-            InputMoney(ref money);
+            double money = InputMoney();
+
             GetAgreement();
-            if (agreement == "N" || agreement == "n")
+
+            if (key == ConsoleKey.Escape)
             {
                 return;
             }
-            else
+
+            if (key == ConsoleKey.Enter)
             {
-                account.Credit += money;
-                account.Money += money;
+                Account.Credit += money;
+
+                Account.Money += money;
             }
         }
 
-        public virtual void WithdrawCredit()
+        public void WithdrawCredit()
         {
             GetAgreement();
-            if (agreement == "N" || agreement == "n")
+
+            if (key == ConsoleKey.Escape)
             {
                 return;
             }
-            else
+
+            if (key == ConsoleKey.Enter)
             {
-                if (account.Credit == 0)
+                if (Account.Credit == 0)
                 {
                     Console.WriteLine("You have no credit.");
                 }
-                if (account.Credit >= account.Money)
+
+                if (Account.Credit >= Account.Money)
                 {
-                    account.Credit -= account.Money;
-                    account.Money = 0;
+                    Account.Credit -= Account.Money;
+                    Account.Money = 0;
                 }
                 else
                 {
-                    account.Money -= account.Credit;
-                    account.Credit = 0;
+                    Account.Money -= Account.Credit;
+                    Account.Credit = 0;
                 }
             }
         }
-        public virtual void AddTransactionMoney(double money)
+
+        public void AddTransactionMoney(double money)
         {
-            account.Money += money;
+            Account.Money += money;
         }
-        public virtual void WithdrawTransactionMoney(double money)
+
+        public void WithdrawTransactionMoney(double money)
         {
-            if (account.Money >= money)
+            if (Account.Money >= money)
             {
-                account.Money -= money;
+                Account.Money -= money;
+
                 Transaction = true;
             }
             else
             {
-                Console.WriteLine("You cannot transfer more money than you have!\nBut you can take out a credit.\nPress any key to continue.");
+                communication.GetMessageAboutMoneyShortageError();
+
                 Transaction = false;
+
                 Console.ReadKey();
             }
         }
-        public virtual double InputMoney(ref double value)
+
+        public double InputMoney()
         {
+            double value;
+
             do
             {
                 Console.Write("\nAmount of money: ");
@@ -166,13 +195,29 @@ namespace Bank
 
             return value;
         }
-        public virtual void GetAgreement()
+
+        public void GetAgreement()
         {
             do
             {
-                Console.Write("Are you sure of your action? (please write yes-Y(y) or no-N(n)): ");
-                agreement = Console.ReadLine();
-            } while (agreement != "N" && agreement != "Y" && agreement != "n" && agreement != "y");
+                communication.GetVerificationInstruction();
+
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.Enter:
+                        key = ConsoleKey.Enter;
+                        break;
+                    case ConsoleKey.Escape:
+                        key = ConsoleKey.Escape;
+                        break;
+                    default:
+                        key = Action.UnknownKey;
+                        break;
+                }
+
+                Console.Clear();
+            }
+            while (key == Action.UnknownKey);
         }
     }
 }

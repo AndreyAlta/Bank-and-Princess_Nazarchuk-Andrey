@@ -16,12 +16,17 @@ namespace Bank
 
         public void GetMessageAboutRegistration()
         {
-            Console.WriteLine("\tRegistration");
+            Console.WriteLine("\t--------Registration--------");
+        }
+
+        public void GetMessageAboutMoneyShortageError()
+        {
+            Console.WriteLine("You cannot withdraw more money than you have!\nBut you can take out a credit.\nPress any key to continue.");
         }
 
         public void GetVerificationInstruction()
         {
-            Console.Write("\nConfirm registration (Enter)\nRegister again(Space)\nCancel and exit registration(Esc)\nChoose. ");
+            Console.Write("Confirm registration (Enter)\nRegister again(Space)\nCancel and exit registration(Esc)");
         }
 
         public void GetMessageAboutError()
@@ -45,12 +50,12 @@ namespace Bank
 
         public void GetDebitCardMenuInstruction()
         {
-            Console.Write("\n1-Deposit.\n2-Withdraw money.\n3-Transfer.\n4-Connect accounts of debit cards\n5-Exit.\nChoose and write: ");
+            Console.Write("\n1-Deposit.\n2-Withdraw money.\n3-Transfer.\n4-Connect accounts of debit cards\n5-Exit.\n");
         }
 
         public void GetCreditCardMenuInstruction()
         {
-            Console.Write("\n1-Deposit.\n2-Withdraw money.\n3-Transfer to a credit card.\n4-Take out a credit.\n5-Repay the credit.\n6-Connect accounts of cards\n7-Exit.\nChoose and write: ");
+            Console.Write("\n1-Deposit.\n2-Withdraw money.\n3-Transfer to a credit card.\n4-Take out a credit.\n5-Repay the credit.\n6-Connect accounts of cards\n7-Exit.\n");
         }
 
         public void GetMessageAboutTransfer()
