@@ -4,9 +4,11 @@ namespace Bank
 {
     class Card
     {
-        private ConsoleKey key;
+        private const int StandartNumberOfDigitsInCardNumber = 20;
 
-        public bool Transaction { get; set; }
+        private ConsoleKey Key;
+
+        public bool TransactionCompleted { get; set; }
 
         public string Surname { get; set; }
 
@@ -18,15 +20,15 @@ namespace Bank
 
         public Account Account { get; set; }
 
-        private Communication communication;
+        private Communication Communication;
 
         public Card()
         {
-            Number = new int[20];
+            Number = new int[StandartNumberOfDigitsInCardNumber];
 
             Account = new Account();
 
-            communication = new Communication();
+            Communication = new Communication();
         }
 
         public void ConnectCards(Account newAccount)
@@ -43,12 +45,12 @@ namespace Bank
             double money = InputMoney();
 
             GetAgreement();
-            if (key == ConsoleKey.Escape)
+            if (Key == ConsoleKey.Escape)
             {
                 return;
             }
 
-            if (key == ConsoleKey.Enter)
+            if (Key == ConsoleKey.Enter)
             {
                 Account.Money += money;
             }
@@ -60,24 +62,24 @@ namespace Bank
 
             GetAgreement();
 
-            if (key == ConsoleKey.Escape)
+            if (Key == ConsoleKey.Escape)
             {
                 return;
             }
 
-            if (key == ConsoleKey.Enter)
+            if (Key == ConsoleKey.Enter)
             {
                 if (Account.Money >= money)
                 {
                     Account.Money -= money;
 
-                    Transaction = true;
+                    TransactionCompleted = true;
                 }
                 else
                 {
-                    communication.GetMessageAboutMoneyShortageError();
+                    Communication.GetMessageAboutMoneyShortageError();
 
-                    Transaction = false;
+                    TransactionCompleted = false;
 
                     Console.ReadKey();
                 }
@@ -121,12 +123,12 @@ namespace Bank
 
             GetAgreement();
 
-            if (key == ConsoleKey.Escape)
+            if (Key == ConsoleKey.Escape)
             {
                 return;
             }
 
-            if (key == ConsoleKey.Enter)
+            if (Key == ConsoleKey.Enter)
             {
                 Account.Credit += money;
 
@@ -138,12 +140,12 @@ namespace Bank
         {
             GetAgreement();
 
-            if (key == ConsoleKey.Escape)
+            if (Key == ConsoleKey.Escape)
             {
                 return;
             }
 
-            if (key == ConsoleKey.Enter)
+            if (Key == ConsoleKey.Enter)
             {
                 if (Account.Credit == 0)
                 {
@@ -174,13 +176,13 @@ namespace Bank
             {
                 Account.Money -= money;
 
-                Transaction = true;
+                TransactionCompleted = true;
             }
             else
             {
-                communication.GetMessageAboutMoneyShortageError();
+                Communication.GetMessageAboutMoneyShortageError();
 
-                Transaction = false;
+                TransactionCompleted = false;
 
                 Console.ReadKey();
             }
@@ -203,24 +205,24 @@ namespace Bank
         {
             do
             {
-                communication.GetVerificationInstruction();
+                Communication.GetVerificationInstruction();
 
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.Enter:
-                        key = ConsoleKey.Enter;
+                        Key = ConsoleKey.Enter;
                         break;
                     case ConsoleKey.Escape:
-                        key = ConsoleKey.Escape;
+                        Key = ConsoleKey.Escape;
                         break;
                     default:
-                        key = Action.UnknownKey;
+                        Key = Action.UnknownKey;
                         break;
                 }
 
                 Console.Clear();
             }
-            while (key == Action.UnknownKey);
+            while (Key == Action.UnknownKey);
         }
     }
 }

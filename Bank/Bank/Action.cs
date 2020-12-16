@@ -7,220 +7,224 @@ namespace Bank
     {
         public const ConsoleKey UnknownKey = 0;
 
-        private ConsoleKey key;
+        private ConsoleKey Key;
 
-        private const int StandartNumberOfDigits = 20;
+        private const int StandartNumberOfDigitsInCardNumber = 20;
 
-        private int indexFirstCard;
-        private int indexSecondCard;
+        private const int StandartNumberOfDigitsInPassword = 4;
 
-        private int counterNumbers;
+        private int IndexFirstCard;
+        private int IndexSecondCard;
 
-        private int counterMaxNumberOfCard;
-        private int counterMinNumberOfCard;
+        private int CounterNumbers;
 
-        private int counterDebit;
-        private int counterCredit;
+        private int CounterMaxNumberOfCard;
+        private int CounterMinNumberOfCard;
 
-        private int counterСoincidence;
+        private int CounterDebit;
+        private int CounterCredit;
 
-        private string password;
+        private int CounterСoincidence;
 
-        private int[] number;
+        private string Password;
 
-        private bool isCancelSelection;
+        private int[] Number;
 
-        private bool isErrorTransaction;
+        private bool IsCancelSelection;
 
-        private bool isRegistrationSuccessfuly;
+        private bool IsErrorTransaction;
 
-        private bool isCreditTransaction;
+        private bool IsRegistrationSuccessfuly;
 
-        private bool isUnknownUser;
+        private bool IsCreditTransaction;
 
-        private bool isConnectDebit;
+        private bool IsUnknownUser;
 
-        private bool isConnectCredit;
+        private bool IsConnectDebit;
 
-        private bool isTrueUser;
+        private bool IsConnectCredit;
 
-        private double money;
+        private bool IsTrueUser;
 
-        CreditCard[] creditCard;
-        DebitCard[] debitCard;
+        private double Money;
 
-        Communication communication;
+        CreditCard[] CreditCard;
+
+        DebitCard[] DebitCard;
+
+        Communication Communication;
 
         public Action()
         {
-            creditCard = new CreditCard[0];
-            debitCard = new DebitCard[0];
+            CreditCard = new CreditCard[0];
 
-            communication = new Communication();
+            DebitCard = new DebitCard[0];
 
-            isTrueUser = true;
+            Communication = new Communication();
 
-            isConnectCredit = false;
+            IsTrueUser = true;
 
-            isConnectDebit = false;
+            IsConnectCredit = false;
 
-            isCancelSelection = false;
+            IsConnectDebit = false;
+
+            IsCancelSelection = false;
         }
 
         public void CreateDebitCard()
         {
             Console.Clear();
-            Array.Resize(ref debitCard, counterDebit + 1);
+            Array.Resize(ref DebitCard, CounterDebit + 1);
 
-            debitCard[counterDebit] = new DebitCard();
+            DebitCard[CounterDebit] = new DebitCard();
 
             do
             {
-                communication.GetMessageAboutRegistration();
+                Communication.GetMessageAboutRegistration();
 
                 Write("Write your surname: ");
-                debitCard[counterDebit].Surname = ReadLine();
+                DebitCard[CounterDebit].Surname = ReadLine();
 
                 Write("Write your name: ");
-                debitCard[counterDebit].Name = ReadLine();
+                DebitCard[CounterDebit].Name = ReadLine();
 
-                counterСoincidence = 0;
+                CounterСoincidence = 0;
 
                 do
                 {
                     InputNumberCard();
 
-                    isRegistrationSuccessfuly = true;
+                    IsRegistrationSuccessfuly = true;
 
-                    for (int numberOfCard = 0; numberOfCard < counterDebit; numberOfCard++)
+                    for (int numberOfCard = 0; numberOfCard < CounterDebit; numberOfCard++)
                     {
 
-                        for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigits; numberOfDigits++)
+                        for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigitsInCardNumber; numberOfDigits++)
                         {
-                            if (debitCard[numberOfCard].Number[numberOfDigits] == number[numberOfDigits])
+                            if (DebitCard[numberOfCard].Number[numberOfDigits] == Number[numberOfDigits])
                             {
-                                counterСoincidence++;
+                                CounterСoincidence++;
                             }
                         }
 
-                        if (counterСoincidence == StandartNumberOfDigits)
+                        if (CounterСoincidence == StandartNumberOfDigitsInCardNumber)
                         {
-                            isRegistrationSuccessfuly = false;
+                            IsRegistrationSuccessfuly = false;
                             WriteLine("This account number already exists");
                         }
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                     }
 
-                    for (int i = 0; i < StandartNumberOfDigits; i++)
+                    for (int i = 0; i < StandartNumberOfDigitsInCardNumber; i++)
                     {
-                        debitCard[counterDebit].Number[i] = number[i];
+                        DebitCard[CounterDebit].Number[i] = Number[i];
                     }
 
-                    counterDebit++;
+                    CounterDebit++;
                     CheckOriginality();
-                    counterDebit--;
+                    CounterDebit--;
                 }
-                while (isRegistrationSuccessfuly == false);
+                while (IsRegistrationSuccessfuly == false);
 
-                counterNumbers = 0;
+                CounterNumbers = 0;
 
                 InputPassword();
 
-                debitCard[counterDebit].Password = password;
+                DebitCard[CounterDebit].Password = Password;
                 Verification();
 
-                if (key == ConsoleKey.Escape)
+                if (Key == ConsoleKey.Escape)
                 {
-                    debitCard[counterDebit].Number = null;
+                    DebitCard[CounterDebit].Number = null;
                     return;
                 }
 
                 Clear();
             }
-            while (key == ConsoleKey.Spacebar);
+            while (Key == ConsoleKey.Spacebar);
 
-            counterDebit++;
+            CounterDebit++;
         }
 
         public void CreateCreditCard()
         {
             Console.Clear();
-            Array.Resize(ref creditCard, counterCredit + 1);
+            Array.Resize(ref CreditCard, CounterCredit + 1);
 
-            creditCard[counterCredit] = new CreditCard();
+            CreditCard[CounterCredit] = new CreditCard();
 
             do
             {
-                communication.GetMessageAboutRegistration();
+                Communication.GetMessageAboutRegistration();
 
                 Write("Write your surname: ");
-                creditCard[counterCredit].Surname = ReadLine();
+                CreditCard[CounterCredit].Surname = ReadLine();
 
                 Write("Write your name: ");
-                creditCard[counterCredit].Name = ReadLine();
+                CreditCard[CounterCredit].Name = ReadLine();
 
-                counterСoincidence = 0;
+                CounterСoincidence = 0;
 
                 do
                 {
                     InputNumberCard();
 
-                    isRegistrationSuccessfuly = true;
+                    IsRegistrationSuccessfuly = true;
 
-                    for (int numberOfCard = 0; numberOfCard < counterCredit; numberOfCard++)
+                    for (int numberOfCard = 0; numberOfCard < CounterCredit; numberOfCard++)
                     {
 
-                        for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigits; numberOfDigits++)
+                        for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigitsInCardNumber; numberOfDigits++)
                         {
-                            if (creditCard[numberOfCard].Number[numberOfDigits] == number[numberOfDigits])
+                            if (CreditCard[numberOfCard].Number[numberOfDigits] == Number[numberOfDigits])
                             {
-                                counterСoincidence++;
+                                CounterСoincidence++;
                             }
                         }
 
-                        if (counterСoincidence == StandartNumberOfDigits)
+                        if (CounterСoincidence == StandartNumberOfDigitsInCardNumber)
                         {
-                            isRegistrationSuccessfuly = false;
+                            IsRegistrationSuccessfuly = false;
                             WriteLine("This account number already exists");
                         }
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
 
                     }
 
-                    for (int i = 0; i < counterNumbers; i++)
+                    for (int i = 0; i < CounterNumbers; i++)
                     {
-                        creditCard[counterCredit].Number[i] = number[i];
+                        CreditCard[CounterCredit].Number[i] = Number[i];
                     }
 
-                    counterCredit++;
+                    CounterCredit++;
 
                     CheckOriginality();
 
-                    counterCredit--;
+                    CounterCredit--;
                 }
-                while (isRegistrationSuccessfuly == false);
+                while (IsRegistrationSuccessfuly == false);
 
-                counterNumbers = 0;
+                CounterNumbers = 0;
 
                 InputPassword();
 
-                creditCard[counterCredit].Password = password;
+                CreditCard[CounterCredit].Password = Password;
 
                 Verification();
 
-                if (key == ConsoleKey.Escape)
+                if (Key == ConsoleKey.Escape)
                 {
-                    creditCard[counterCredit].Number = null;
+                    CreditCard[CounterCredit].Number = null;
                     return;
                 }
 
                 Clear();
             }
-            while (key == ConsoleKey.Spacebar);
+            while (Key == ConsoleKey.Spacebar);
 
-            counterCredit++;
+            CounterCredit++;
         }
 
         public void Verification()
@@ -229,25 +233,25 @@ namespace Bank
             {
                 Console.Clear();
 
-                communication.GetVerificationInstruction();
+                Communication.GetVerificationInstruction();
 
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.Enter:
-                        key = ConsoleKey.Enter;
+                        Key = ConsoleKey.Enter;
                         break;
                     case ConsoleKey.Spacebar:
-                        key = ConsoleKey.Spacebar;
+                        Key = ConsoleKey.Spacebar;
                         break;
                     case ConsoleKey.Escape:
-                        key = ConsoleKey.Escape;
+                        Key = ConsoleKey.Escape;
                         break;
                     default:
-                        key = UnknownKey;
+                        Key = UnknownKey;
                         break;
                 }
             }
-            while (key == UnknownKey);
+            while (Key == UnknownKey);
         }
 
         public void GetInfo()
@@ -258,106 +262,106 @@ namespace Bank
 
             InputNumberCard();
 
-            if (isTrueUser == true || isConnectCredit == true || isConnectDebit == true)
+            if (IsTrueUser == true || IsConnectCredit == true || IsConnectDebit == true)
             {
                 InputPassword();
 
                 Clear();
             }
 
-            for (int numberOfCard = 0; numberOfCard < counterDebit; numberOfCard++, counterСoincidence = 0)
+            for (int numberOfCard = 0; numberOfCard < CounterDebit; numberOfCard++, CounterСoincidence = 0)
             {
 
-                for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigits; numberOfDigits++)
+                for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigitsInCardNumber; numberOfDigits++)
                 {
-                    if (debitCard[numberOfCard].Number[numberOfDigits] == number[numberOfDigits])
+                    if (DebitCard[numberOfCard].Number[numberOfDigits] == Number[numberOfDigits])
                     {
-                        counterСoincidence++;
+                        CounterСoincidence++;
                     }
                 }
 
                 switch (true)
                 {
-                    case true when isTrueUser == false && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == false:
+                    case true when IsTrueUser == false && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == false:
 
-                        indexSecondCard = numberOfCard;
+                        IndexSecondCard = numberOfCard;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isTrueUser == false && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == true && isConnectCredit == false:
+                    case true when IsTrueUser == false && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == true && IsConnectCredit == false:
 
-                        communication.GetMessageAboutError();
+                        Communication.GetMessageAboutError();
 
-                        isErrorTransaction = true;
+                        IsErrorTransaction = true;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isConnectDebit == true && counterСoincidence == StandartNumberOfDigits && debitCard[numberOfCard].Password == password:
+                    case true when IsConnectDebit == true && CounterСoincidence == StandartNumberOfDigitsInCardNumber && DebitCard[numberOfCard].Password == Password:
 
-                        indexSecondCard = numberOfCard;
+                        IndexSecondCard = numberOfCard;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isConnectDebit == true && counterСoincidence != StandartNumberOfDigits || debitCard[numberOfCard].Password != password:
+                    case true when IsConnectDebit == true && CounterСoincidence != StandartNumberOfDigitsInCardNumber || DebitCard[numberOfCard].Password != Password:
 
-                        isConnectDebit = false;
+                        IsConnectDebit = false;
                         return;
                 }
 
-                if (isTrueUser == true && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == false)
+                if (IsTrueUser == true && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == false)
                 {
-                    indexFirstCard = numberOfCard;
+                    IndexFirstCard = numberOfCard;
                     break;
                 }
             }
-            if (counterСoincidence == StandartNumberOfDigits)
+            if (CounterСoincidence == StandartNumberOfDigitsInCardNumber)
             {
-                isUnknownUser = false;
+                IsUnknownUser = false;
                 loggedIn = true;
 
-                if (debitCard[indexFirstCard].Password == password)
+                if (DebitCard[IndexFirstCard].Password == Password)
                 {
                     do
                     {
                         Clear();
 
-                        communication.GetInformationAboutUser(debitCard[indexFirstCard].Name, debitCard[indexFirstCard].Surname, StandartNumberOfDigits, debitCard[indexFirstCard].Number);
+                        Communication.GetInformationAboutUser(DebitCard[IndexFirstCard].Name, DebitCard[IndexFirstCard].Surname, StandartNumberOfDigitsInCardNumber, DebitCard[IndexFirstCard].Number);
 
-                        debitCard[indexFirstCard].CheckMoney();
+                        DebitCard[IndexFirstCard].CheckMoney();
 
-                        communication.GetDebitCardMenuInstruction();
+                        Communication.GetDebitCardMenuInstruction();
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
 
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.NumPad1:
 
-                                debitCard[indexFirstCard].AddMoney();
+                                DebitCard[IndexFirstCard].AddMoney();
                                 break;
                             case ConsoleKey.NumPad2:
 
-                                debitCard[indexFirstCard].WithdrawMoney();
+                                DebitCard[IndexFirstCard].WithdrawMoney();
                                 break;
                             case ConsoleKey.NumPad3:
 
                                 Console.Clear();
 
-                                isCreditTransaction = false;
+                                IsCreditTransaction = false;
 
-                                isTrueUser = false;
+                                IsTrueUser = false;
 
-                                communication.GetMessageAboutTransfer();
+                                Communication.GetMessageAboutTransfer();
 
                                 GetInfo();
 
-                                isTrueUser = true;
+                                IsTrueUser = true;
 
                                 do
                                 {
                                     Write("Enter the amount of money: ");
                                 }
-                                while (!double.TryParse(Console.ReadLine(), out money) || money < 0);
+                                while (!double.TryParse(Console.ReadLine(), out Money) || Money < 0);
 
                                 Write("Are you sure of your action? (please choose Enter or Esc: ");
                                 do
@@ -365,145 +369,145 @@ namespace Bank
                                     switch (Console.ReadKey().Key)
                                     {
                                         case ConsoleKey.Enter:
-                                            key = ConsoleKey.Enter;
+                                            Key = ConsoleKey.Enter;
 
-                                            if (isUnknownUser == false)
+                                            if (IsUnknownUser == false)
                                             {
 
-                                                debitCard[indexFirstCard].WithdrawTransactionMoney(money);
+                                                DebitCard[IndexFirstCard].WithdrawTransactionMoney(Money);
 
-                                                if (isCreditTransaction == false && debitCard[indexFirstCard].Transaction == true)
+                                                if (IsCreditTransaction == false && DebitCard[IndexFirstCard].TransactionCompleted == true)
                                                 {
-                                                    debitCard[indexSecondCard].TransactionMoney(money);
+                                                    DebitCard[IndexSecondCard].TransactionMoney(Money);
 
-                                                    communication.GetMessageAboutSuccessfullyOperation();
+                                                    Communication.GetMessageAboutSuccessfullyOperation();
                                                 }
 
-                                                else if (isCreditTransaction == true && debitCard[indexFirstCard].Transaction == true)
+                                                else if (IsCreditTransaction == true && DebitCard[IndexFirstCard].TransactionCompleted == true)
                                                 {
-                                                    creditCard[indexSecondCard].AddTransactionMoney(money);
+                                                    CreditCard[IndexSecondCard].AddTransactionMoney(Money);
 
-                                                    communication.GetMessageAboutSuccessfullyOperation();
+                                                    Communication.GetMessageAboutSuccessfullyOperation();
 
-                                                    isCreditTransaction = false;
+                                                    IsCreditTransaction = false;
                                                 }
                                             }
 
-                                            else if (isUnknownUser == true)
+                                            else if (IsUnknownUser == true)
                                             {
-                                                debitCard[indexFirstCard].WithdrawTransactionMoney(money);
+                                                DebitCard[IndexFirstCard].WithdrawTransactionMoney(Money);
 
-                                                communication.GetMessageAboutSuccessfullyOperation();
+                                                Communication.GetMessageAboutSuccessfullyOperation();
 
                                                 Clear();
                                             }
                                             break;
                                         case ConsoleKey.Escape:
-                                            key = ConsoleKey.Escape;
+                                            Key = ConsoleKey.Escape;
                                             break;
                                         default:
-                                            key = UnknownKey;
+                                            Key = UnknownKey;
                                             break;
                                     }
                                 }
-                                while (key == UnknownKey);
-                                isCreditTransaction = false;
+                                while (Key == UnknownKey);
+                                IsCreditTransaction = false;
                                 break;
                             case ConsoleKey.NumPad4:
-                                isConnectDebit = true;
+                                IsConnectDebit = true;
 
                                 GetInfo();
 
-                                if (isConnectDebit == true)
+                                if (IsConnectDebit == true)
                                 {
-                                    isConnectDebit = false;
+                                    IsConnectDebit = false;
 
-                                    debitCard[indexFirstCard].ConnectCards(debitCard[indexSecondCard].Account);
+                                    DebitCard[IndexFirstCard].ConnectCards(DebitCard[IndexSecondCard].Account);
 
-                                    communication.GetMessageAboutSuccessfullyOperation();
+                                    Communication.GetMessageAboutSuccessfullyOperation();
                                 }
                                 else
                                 {
-                                    communication.GetMessageAboutWrongPassword();
+                                    Communication.GetMessageAboutWrongPassword();
 
                                 }
 
-                                isConnectDebit = false;
+                                IsConnectDebit = false;
                                 break;
                             case ConsoleKey.NumPad5:
 
-                                isCancelSelection = true;
+                                IsCancelSelection = true;
                                 return;
                         }
                         Console.Clear();
                     }
-                    while (isCancelSelection == false);
+                    while (IsCancelSelection == false);
 
-                    isCancelSelection = false;
+                    IsCancelSelection = false;
                 }
                 else
                 {
-                    communication.GetMessageAboutWrongPassword();
+                    Communication.GetMessageAboutWrongPassword();
                 }
 
             }
 
-            for (int i = 0; i < counterCredit; i++, counterСoincidence = 0)
+            for (int i = 0; i < CounterCredit; i++, CounterСoincidence = 0)
             {
 
-                counterСoincidence = 0;
+                CounterСoincidence = 0;
 
-                for (int j = 0; j < StandartNumberOfDigits; j++)
+                for (int j = 0; j < StandartNumberOfDigitsInCardNumber; j++)
                 {
-                    if (creditCard[i].Number[j] == number[j])
+                    if (CreditCard[i].Number[j] == Number[j])
                     {
-                        counterСoincidence++;
+                        CounterСoincidence++;
                     }
                 }
 
                 switch (true)
                 {
-                    case true when isTrueUser == false && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == true:
+                    case true when IsTrueUser == false && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == true:
 
-                        indexSecondCard = i;
+                        IndexSecondCard = i;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isTrueUser == false && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == false:
+                    case true when IsTrueUser == false && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == false:
 
-                        isCreditTransaction = true;
+                        IsCreditTransaction = true;
 
-                        indexSecondCard = i;
+                        IndexSecondCard = i;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isConnectCredit == true && counterСoincidence == StandartNumberOfDigits && creditCard[i].Password == password:
+                    case true when IsConnectCredit == true && CounterСoincidence == StandartNumberOfDigitsInCardNumber && CreditCard[i].Password == Password:
 
-                        indexSecondCard = i;
+                        IndexSecondCard = i;
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
                         return;
-                    case true when isConnectCredit == true && counterСoincidence != StandartNumberOfDigits || creditCard[i].Password != password:
+                    case true when IsConnectCredit == true && CounterСoincidence != StandartNumberOfDigitsInCardNumber || CreditCard[i].Password != Password:
 
-                        isConnectCredit = false;
+                        IsConnectCredit = false;
                         return;
 
                 }
 
-                if (isTrueUser == true && counterСoincidence == StandartNumberOfDigits && isCreditTransaction == false)
+                if (IsTrueUser == true && CounterСoincidence == StandartNumberOfDigitsInCardNumber && IsCreditTransaction == false)
                 {
-                    indexFirstCard = i;
+                    IndexFirstCard = i;
                     break;
                 }
 
             }
 
-            if (isConnectCredit == true)
+            if (IsConnectCredit == true)
             {
                 return;
             }
 
-            if (isTrueUser == false && counterСoincidence != StandartNumberOfDigits)
+            if (IsTrueUser == false && CounterСoincidence != StandartNumberOfDigitsInCardNumber)
             {
                 Write("Write the name of the recipient: ");
                 ReadLine();
@@ -511,71 +515,71 @@ namespace Bank
                 Write("Write the surnname of the recipient: ");
                 ReadLine();
 
-                isUnknownUser = true;
+                IsUnknownUser = true;
                 return;
             }
 
-            if (counterСoincidence == StandartNumberOfDigits)
+            if (CounterСoincidence == StandartNumberOfDigitsInCardNumber)
             {
-                isUnknownUser = false;
+                IsUnknownUser = false;
 
                 loggedIn = true;
 
-                if (creditCard[indexFirstCard].Password == password)
+                if (CreditCard[IndexFirstCard].Password == Password)
                 {
                     do
                     {
                         Clear();
 
-                        communication.GetInformationAboutUser(debitCard[indexFirstCard].Name, debitCard[indexFirstCard].Surname, StandartNumberOfDigits, debitCard[indexFirstCard].Number);
+                        Communication.GetInformationAboutUser(DebitCard[IndexFirstCard].Name, DebitCard[IndexFirstCard].Surname, StandartNumberOfDigitsInCardNumber, DebitCard[IndexFirstCard].Number);
 
-                        creditCard[indexFirstCard].CheckMoney();
+                        CreditCard[IndexFirstCard].CheckMoney();
 
-                        creditCard[indexFirstCard].ShowCredit();
+                        CreditCard[IndexFirstCard].ShowCredit();
 
-                        communication.GetCreditCardMenuInstruction();
+                        Communication.GetCreditCardMenuInstruction();
 
-                        communication.GetCreditCardMenuInstruction();
+                        Communication.GetCreditCardMenuInstruction();
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
 
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.NumPad1:
 
-                                creditCard[indexFirstCard].AddMoney();
+                                CreditCard[IndexFirstCard].AddMoney();
 
                                 break;
                             case ConsoleKey.NumPad2:
 
-                                creditCard[indexFirstCard].WithdrawMoney();
+                                CreditCard[IndexFirstCard].WithdrawMoney();
 
                                 break;
                             case ConsoleKey.NumPad3:
 
-                                if (creditCard[indexFirstCard].CheckCredit())
+                                if (CreditCard[IndexFirstCard].CheckCredit())
                                 {
-                                    isTrueUser = false;
+                                    IsTrueUser = false;
 
-                                    isErrorTransaction = false;
+                                    IsErrorTransaction = false;
 
-                                    communication.GetMessageAboutTransfer();
+                                    Communication.GetMessageAboutTransfer();
 
-                                    isCreditTransaction = true;
+                                    IsCreditTransaction = true;
 
                                     GetInfo();
 
-                                    isTrueUser = true;
+                                    IsTrueUser = true;
 
-                                    isCreditTransaction = false;
+                                    IsCreditTransaction = false;
 
-                                    if (isErrorTransaction == false)
+                                    if (IsErrorTransaction == false)
                                     {
                                         do
                                         {
                                             Write("Enter the amount of money: ");
                                         }
-                                        while (!double.TryParse(ReadLine(), out money) || money < 0);
+                                        while (!double.TryParse(ReadLine(), out Money) || Money < 0);
 
                                         Write("Are you sure of your action? (please write yes-Y(y) or no-N(n)): ");
 
@@ -585,108 +589,108 @@ namespace Bank
                                             {
                                                 case ConsoleKey.Enter:
 
-                                                    if (isUnknownUser == false)
+                                                    if (IsUnknownUser == false)
                                                     {
-                                                        creditCard[indexFirstCard].WithdrawTransactionMoney(money);
+                                                        CreditCard[IndexFirstCard].WithdrawTransactionMoney(Money);
 
-                                                        if (creditCard[indexFirstCard].Transaction == true)
+                                                        if (CreditCard[IndexFirstCard].TransactionCompleted == true)
                                                         {
-                                                            creditCard[indexSecondCard].AddTransactionMoney(money);
+                                                            CreditCard[IndexSecondCard].AddTransactionMoney(Money);
 
-                                                            communication.GetMessageAboutSuccessfullyOperation();
+                                                            Communication.GetMessageAboutSuccessfullyOperation();
                                                         }
                                                     }
-                                                    else if (isUnknownUser == true)
+                                                    else if (IsUnknownUser == true)
                                                     {
-                                                        creditCard[indexFirstCard].WithdrawTransactionMoney(money);
+                                                        CreditCard[IndexFirstCard].WithdrawTransactionMoney(Money);
 
-                                                        communication.GetMessageAboutSuccessfullyOperation();
+                                                        Communication.GetMessageAboutSuccessfullyOperation();
 
                                                         Clear();
                                                     }
                                                     break;
                                                 case ConsoleKey.Escape:
-                                                    key = ConsoleKey.Escape;
+                                                    Key = ConsoleKey.Escape;
                                                     break;
                                                 default:
-                                                    key = UnknownKey;
+                                                    Key = UnknownKey;
                                                     break;
                                             }
                                         }
-                                        while (key == UnknownKey);
+                                        while (Key == UnknownKey);
 
-                                        isErrorTransaction = false;
+                                        IsErrorTransaction = false;
                                     }
                                     else
                                     {
                                         Clear();
 
-                                        communication.GetMessageAboutPayingOffCredit();
+                                        Communication.GetMessageAboutPayingOffCredit();
                                     }
                                 }
                                 break;
                             case ConsoleKey.NumPad4:
 
-                                creditCard[indexFirstCard].AddCredit();
+                                CreditCard[IndexFirstCard].AddCredit();
 
                                 break;
                             case ConsoleKey.NumPad5:
 
-                                creditCard[indexFirstCard].WithdrawCredit();
+                                CreditCard[IndexFirstCard].WithdrawCredit();
 
                                 break;
                             case ConsoleKey.NumPad6:
 
-                                isConnectCredit = true;
+                                IsConnectCredit = true;
 
-                                isTrueUser = false;
+                                IsTrueUser = false;
 
-                                isCreditTransaction = true;
+                                IsCreditTransaction = true;
 
                                 GetInfo();
 
-                                isCreditTransaction = false;
+                                IsCreditTransaction = false;
 
-                                isTrueUser = true;
+                                IsTrueUser = true;
 
-                                if (isConnectCredit == true)
+                                if (IsConnectCredit == true)
                                 {
-                                    isConnectCredit = false;
+                                    IsConnectCredit = false;
 
-                                    creditCard[indexFirstCard].ConnectCards(creditCard[indexSecondCard].Account);
+                                    CreditCard[IndexFirstCard].ConnectCards(CreditCard[IndexSecondCard].Account);
 
-                                    communication.GetMessageAboutSuccessfullyOperation();
+                                    Communication.GetMessageAboutSuccessfullyOperation();
                                 }
 
                                 else
                                 {
-                                    communication.GetMessageAboutWrongPassword();
+                                    Communication.GetMessageAboutWrongPassword();
 
                                 }
 
-                                isConnectCredit = false;
+                                IsConnectCredit = false;
 
                                 break;
                             case ConsoleKey.NumPad7:
 
-                                isCancelSelection = true;
+                                IsCancelSelection = true;
 
                                 return;
                         }
                     }
-                    while (isCancelSelection == false);
+                    while (IsCancelSelection == false);
 
-                    isCancelSelection = false;
+                    IsCancelSelection = false;
                 }
                 else
                 {
-                    communication.GetMessageAboutWrongPassword();
+                    Communication.GetMessageAboutWrongPassword();
                 }
             }
 
             if (loggedIn == false)
             {
-                communication.GetMessageAboutUnknownAccount();
+                Communication.GetMessageAboutUnknownAccount();
                 return;
             }
 
@@ -697,9 +701,9 @@ namespace Bank
             do
             {
                 Write("Write your password(4 digits): ");
-                password = Console.ReadLine();
+                Password = Console.ReadLine();
             }
-            while (!int.TryParse(password, out int value) || password.Length != 4);
+            while (!int.TryParse(Password, out int value) || Password.Length != StandartNumberOfDigitsInPassword);
         }
 
         public void InputNumberCard()
@@ -715,16 +719,16 @@ namespace Bank
 
                 char[] numberChar = numberString.ToCharArray();
 
-                number = new int[numberChar.Length];
+                Number = new int[numberChar.Length];
 
-                counterNumbers = numberChar.Length;
+                CounterNumbers = numberChar.Length;
 
                 numberParse = true;
 
                 for (int i = 0; i < numberChar.Length; i++)
                 {
 
-                    if (!int.TryParse(numberChar[i].ToString(), out number[i]))
+                    if (!int.TryParse(numberChar[i].ToString(), out Number[i]))
                     {
                         numberParse = false;
                     }
@@ -732,7 +736,7 @@ namespace Bank
                 }
 
             }
-            while (numberParse == false || counterNumbers != StandartNumberOfDigits);
+            while (numberParse == false || CounterNumbers != StandartNumberOfDigitsInCardNumber);
         }
 
         public void CheckOriginality()
@@ -743,16 +747,16 @@ namespace Bank
 
             int temp;
 
-            if (counterDebit < counterCredit)
+            if (CounterDebit < CounterCredit)
             {
-                counterMaxNumberOfCard = counterCredit;
-                counterMinNumberOfCard = counterDebit;
+                CounterMaxNumberOfCard = CounterCredit;
+                CounterMinNumberOfCard = CounterDebit;
             }
 
             else
             {
-                counterMaxNumberOfCard = counterDebit;
-                counterMinNumberOfCard = counterCredit;
+                CounterMaxNumberOfCard = CounterDebit;
+                CounterMinNumberOfCard = CounterCredit;
 
                 temp = numberOfTheFirstTypeOfCard;
 
@@ -761,39 +765,39 @@ namespace Bank
                 numberOfTheSecondTypeOfCard = temp;
             }
 
-            for (numberOfTheFirstTypeOfCard = 0; numberOfTheFirstTypeOfCard < counterMinNumberOfCard; numberOfTheFirstTypeOfCard++)
+            for (numberOfTheFirstTypeOfCard = 0; numberOfTheFirstTypeOfCard < CounterMinNumberOfCard; numberOfTheFirstTypeOfCard++)
             {
 
-                for (numberOfTheSecondTypeOfCard = 0; numberOfTheSecondTypeOfCard < counterMaxNumberOfCard; numberOfTheSecondTypeOfCard++)
+                for (numberOfTheSecondTypeOfCard = 0; numberOfTheSecondTypeOfCard < CounterMaxNumberOfCard; numberOfTheSecondTypeOfCard++)
                 {
 
-                    for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigits; numberOfDigits++)
+                    for (int numberOfDigits = 0; numberOfDigits < StandartNumberOfDigitsInCardNumber; numberOfDigits++)
                     {
 
-                        if (debitCard[numberOfTheFirstTypeOfCard].Number == null || creditCard[numberOfTheSecondTypeOfCard].Number == null)
+                        if (DebitCard[numberOfTheFirstTypeOfCard].Number == null || CreditCard[numberOfTheSecondTypeOfCard].Number == null)
                         {
                             break;
                         }
 
-                        if (debitCard[numberOfTheFirstTypeOfCard].Number[numberOfDigits] == creditCard[numberOfTheSecondTypeOfCard].Number[numberOfDigits])
+                        if (DebitCard[numberOfTheFirstTypeOfCard].Number[numberOfDigits] == CreditCard[numberOfTheSecondTypeOfCard].Number[numberOfDigits])
                         {
-                            counterСoincidence++;
+                            CounterСoincidence++;
                         }
 
                     }
 
-                    if (counterСoincidence == StandartNumberOfDigits)
+                    if (CounterСoincidence == StandartNumberOfDigitsInCardNumber)
                     {
-                        isRegistrationSuccessfuly = false;
+                        IsRegistrationSuccessfuly = false;
 
                         WriteLine("This account number already exists");
 
-                        counterСoincidence = 0;
+                        CounterСoincidence = 0;
 
                         return;
                     }
 
-                    counterСoincidence = 0;
+                    CounterСoincidence = 0;
                 }
             }
         }
