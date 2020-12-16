@@ -28,6 +28,7 @@ namespace Bank
 
             communication = new Communication();
         }
+
         public void ConnectCards(Account newAccount)
         {
             newAccount.Money += Account.Money;
@@ -36,6 +37,7 @@ namespace Bank
 
             Account = newAccount;
         }
+
         public void AddMoney()
         {
             double money = InputMoney();
@@ -51,6 +53,7 @@ namespace Bank
                 Account.Money += money;
             }
         }
+
         public void WithdrawMoney()
         {
             double money = InputMoney();

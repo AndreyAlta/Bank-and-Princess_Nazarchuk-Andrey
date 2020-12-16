@@ -2,8 +2,8 @@
 {
     public class Account
     {
-        public double Money;
+        public double Money { get; set; }
 
-        public double Credit;
+        public double Credit { get; set; }
     }
 }
