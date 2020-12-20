@@ -48,17 +48,17 @@ namespace Bank
 
         private double Money;
 
-        CreditCard[] CreditCard;
+        Card[] CreditCard;
 
-        DebitCard[] DebitCard;
+        Card[] DebitCard;
 
         Communication Communication;
 
         public Action()
         {
-            CreditCard = new CreditCard[0];
+            CreditCard = new Card[0];
 
-            DebitCard = new DebitCard[0];
+            DebitCard = new Card[0];
 
             Communication = new Communication();
 
@@ -76,7 +76,7 @@ namespace Bank
             Console.Clear();
             Array.Resize(ref DebitCard, CounterDebit + 1);
 
-            DebitCard[CounterDebit] = new DebitCard();
+            DebitCard[CounterDebit] = new Card();
 
             do
             {
@@ -152,7 +152,7 @@ namespace Bank
             Console.Clear();
             Array.Resize(ref CreditCard, CounterCredit + 1);
 
-            CreditCard[CounterCredit] = new CreditCard();
+            CreditCard[CounterCredit] = new Card();
 
             do
             {
